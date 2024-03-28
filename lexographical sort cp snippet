@@ -1,0 +1,69 @@
+public class lexicographicalSort {
+
+    static String store = "";
+
+    static class Node {
+        char data;
+        Node[] children;
+        boolean isTerminal;
+
+        public Node(char data, Node[] children, boolean isTerminal) {
+            this.data = data;
+            this.children = children;
+            this.isTerminal = isTerminal;
+        }
+    }
+
+    static Node root;
+
+    static class Trie {
+
+        public Trie() {
+            Node[] children = new Node[10];
+            root = new Node('.', children, false);
+        }
+
+        public void insert(String s) {
+            int n = s.length();
+            Node current = root;
+            for(int i = 0; i < n; i++) {
+                if(current.children[s.charAt(i) - '0'] == null) {
+                    Node[] temp = new Node[10];
+                    current.children[s.charAt(i) - '0'] = new Node(s.charAt(i), temp, false);
+                }
+                current = current.children[s.charAt(i) - '0'];
+                if(i == n - 1) {
+                    current.isTerminal = true;
+                }
+            }
+        }
+
+        public void traverse(Node current) {
+            if(current == null) {
+                return;
+            }
+            if(current.isTerminal) {
+                System.out.println(store + " ");
+                return;
+            }
+            for(Node e : current.children) {
+                if(e != null) {
+                    store = store + e.data;
+                    current = e;
+                    traverse(current);
+                    store = store.substring(0, store.length() - 1);
+                }
+            }
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Trie t = new Trie();
+        t.insert("112");
+        t.insert("23");
+        t.insert("023");
+        t.insert("11123");
+        t.traverse(root);
+    }
+}
